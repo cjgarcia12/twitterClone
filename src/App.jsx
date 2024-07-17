@@ -25,17 +25,19 @@ const theme = createTheme({
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-        <HeaderBar />
-        <Grid container spacing={4} sx={{ paddingTop: '100px'}}>
-          <Grid item xs={12}>
-            <CardPost />
-          </Grid>
-          <Grid item xs={12}>
-            <CardPost />
-          </Grid>
+      <HeaderBar />
+      <Grid container spacing={4} sx={{ paddingTop: '100px' }}>
+        <Grid item xs={12}>
+          <CreatePost />
         </Grid>
-
-        <FooterBar className='footer'/>
+        <Grid item xs={12}>
+          <CardPost />
+        </Grid>
+        <Grid item xs={12}>
+          <CardPost />
+        </Grid>
+      </Grid>
+      <FooterBar className='footer'/>
     </ThemeProvider>
   );
 }
