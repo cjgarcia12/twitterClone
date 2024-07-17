@@ -5,7 +5,7 @@ import { Grid, createTheme, ThemeProvider } from "@mui/material";
 import CardPost from "./components/CardPosts";
 import FooterBar from "./components/FooterBar";
 import CreatePost from './components/CreatePost';
-import LoginPage from './components/LoginPage';
+// import LoginPage from './components/LoginPage';
 
 const theme = createTheme({
   palette: {
@@ -37,12 +37,17 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <HeaderBar />
-      <Grid container spacing={4} sx={{ paddingTop: '100px' }}>
+      <HeaderBar handleMenuClick={handleMenuClick} /> {/* Pass handleMenuClick to HeaderBar */}
+      <Grid container spacing={4} sx={{ paddingTop: '100px', marginBottom: '100px' }} justifyContent='center'>
+        {showCreatePost && ( // Conditionally render CreatePost component
+          <Grid item xs={12}>
+            <CreatePost setShowCreatePost={setShowCreatePost} /> {/* Pass setShowCreatePost to CreatePost */}
+          </Grid>
+        )}
         <Grid item xs={12}>
           <CreatePost />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={8}>
           <CardPost />
         </Grid>
         <Grid item xs={12} sm={8}>
