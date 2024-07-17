@@ -11,7 +11,7 @@ const Post = sequelize.define('Post', {
     defaultValue: DataTypes.NOW
   },
   author: {
-    type: DataTypes.STRING, // Ensure this matches the type of user ID
+    type: DataTypes.STRING,
     allowNull: false
   },
   tags: {
@@ -20,4 +20,3 @@ const Post = sequelize.define('Post', {
 });
 
 module.exports = Post;
-
