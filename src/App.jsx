@@ -1,11 +1,10 @@
+import { useState } from 'react'; // Ensure this import is correct
 import './App.css';
-import { useState } from 'react';
 import HeaderBar from './components/HeaderBar';
 import { Grid, createTheme, ThemeProvider } from "@mui/material";
 import CardPost from "./components/CardPosts";
 import FooterBar from "./components/FooterBar";
 import CreatePost from './components/CreatePost';
-import LoginPage from './components/LoginPage';
 
 const theme = createTheme({
   palette: {
@@ -22,7 +21,7 @@ const theme = createTheme({
       contrastText: '#e5e6ed'
     }
   }
-})
+});
 
 export default function App() {
   const [showCreatePost, setShowCreatePost] = useState(false); // Added state to control CreatePost visibility
@@ -37,15 +36,17 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <HeaderBar />
+      <HeaderBar handleMenuClick={handleMenuClick} /> {/* Pass handleMenuClick to HeaderBar */}
       <Grid container spacing={4} sx={{ paddingTop: '100px' }}>
-        <Grid item xs={12}>
-          <CreatePost />
-        </Grid>
+        {showCreatePost && ( // Conditionally render CreatePost component
+          <Grid item xs={12}>
+            <CreatePost setShowCreatePost={setShowCreatePost} /> {/* Pass setShowCreatePost to CreatePost */}
+          </Grid>
+        )}
         <Grid item xs={12}>
           <CardPost />
         </Grid>
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12}>
           <CardPost />
         </Grid>
       </Grid>
