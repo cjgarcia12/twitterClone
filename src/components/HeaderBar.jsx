@@ -20,7 +20,7 @@ export default function HeaderBar() {
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <AddCircleIcon /> : <AccountCircleIcon />}
+                {index % 2 === 0 ? <AccountCircleIcon /> : <AddCircleIcon /> }
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>

@@ -11,7 +11,7 @@ import { Stack, Card, CardActions, CardContent, Button, Typography, IconButton }
 export default function CardPosts() {
   return (
     <>
-        <Card sx={{ width: '60%', marginLeft: '20%' }} elevation={16}>
+        <Card elevation={16}>
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                     Lizard
@@ -27,6 +27,7 @@ export default function CardPosts() {
                     justifyContent='space-between'
                     alignItems='center'
                     spacing={2}
+                    sx={{width: '95%'}}
                 >
                 <div>
                     <Button size="small">Like</Button>

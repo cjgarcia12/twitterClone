@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Button from '@mui/material/Button';
 // import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { Stack } from '@mui/material';
 // import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = ['Contact', 'About Us',];
@@ -35,9 +36,8 @@ function FooterBar() {
 //   };
 
   return (
-    <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, display: 'flex', justifyContent: 'center' }}>
+    <AppBar position="fixed" sx={{ top: 'auto', bottom: 0 }}>
         <Toolbar disableGutters>
-          <img src="/images/Y-logo.png" alt="Logo" style={{ width: 45}} />
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -75,17 +75,25 @@ function FooterBar() {
               ))}
             </Menu>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }}}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
+          <Stack
+            direction='row'
+            justifyContent='center'
+            spacing={2}
+            sx={{width: '100%'}}
+          >
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }}}>
+              {pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
+          </Stack>
+
         </Toolbar>
     </AppBar>
   );
