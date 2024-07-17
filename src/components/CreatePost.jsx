@@ -27,6 +27,16 @@ const CreatePost = () => {
           action={<IconButton><MoreHoriz /></IconButton>}
         />
         <CardContent>
+        <TextField
+            fullWidth
+            placeholder="Title"
+            multiline
+            rows={1}
+            variant="outlined"
+            value={comment}
+            onChange={handleCommentChange}
+            sx={{marginBottom: 2}}
+          />
           <TextField
             fullWidth
             placeholder="What's on your mind?"

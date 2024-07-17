@@ -32,10 +32,10 @@ export default function App() {
         <Grid item xs={12}>
           <CreatePost />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={8}>
           <CardPost />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={8}>
           <CardPost />
         </Grid>
       </Grid>
