@@ -1,16 +1,16 @@
 const express = require('express');
 const sequelize = require('./database');
 const postRoutes = require('./postRoutes');
-const commentRoutes = require('./commentRoutes');  // Add this line
+const commentRoutes = require('./commentRoutes');
 const likeRoutes = require('./likeRoutes');
 const authRoutes = require('./authRoutes');
-const User = require('./user');  // Ensure User model is imported
+const User = require('./user');
 
 const app = express();
 
 app.use(express.json());
 app.use('/posts', postRoutes);
-app.use('/comments', commentRoutes);  // Add this line
+app.use('/comments', commentRoutes);
 app.use('/likes', likeRoutes);
 app.use('/auth', authRoutes);
 app.use('/uploads', express.static('uploads'));

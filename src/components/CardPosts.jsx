@@ -1,8 +1,12 @@
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+// import Card from '@mui/material/Card';
+// import CardActions from '@mui/material/CardActions';
+// import CardContent from '@mui/material/CardContent';
+// import Button from '@mui/material/Button';
+// import Typography from '@mui/material/Typography';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+// import IconButton from '@mui/material/IconButton';
+import { Stack, Card, CardActions, CardContent, Button, Typography, IconButton } from '@mui/material';
 
 export default function CardPosts() {
   return (
@@ -18,8 +22,26 @@ export default function CardPosts() {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Like</Button>
-                <Button size="small">Share</Button>
+                <Stack 
+                    direction='row'
+                    justifyContent='space-between'
+                    alignItems='center'
+                    spacing={2}
+                >
+                <div>
+                    <Button size="small">Like</Button>
+                    <Button size="small">Share</Button>
+                </div>
+                <div>
+                    <IconButton aria-label='edit'>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton aria-label='delete'>
+                        <DeleteIcon />
+                    </IconButton>
+                </div>          
+                </Stack>
+
             </CardActions>
         </Card>
     </>
