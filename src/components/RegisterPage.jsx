@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
-import { loginUser } from '../api';  // Correct the import path
+import { registerUser } from '../api';  // Correct the import path
 import { TextField, Button, Container, Typography } from '@mui/material';
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginUser({ username, password });
-      localStorage.setItem('token', response.data.token);
-      // Redirect or update UI to show logged-in state
+      await registerUser({ username, password });
+      // Redirect to login page or update UI to show successful registration
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('Registration failed:', error);
     }
   };
 
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
-        Login
+        Register
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -41,11 +40,11 @@ const LoginPage = () => {
           required
         />
         <Button variant="contained" color="primary" type="submit" fullWidth>
-          Login
+          Register
         </Button>
       </form>
     </Container>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

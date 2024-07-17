@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');  // Import the cors module
 const sequelize = require('./database');
 const postRoutes = require('./postRoutes');
 const commentRoutes = require('./commentRoutes');
@@ -7,6 +8,9 @@ const authRoutes = require('./authRoutes');
 const User = require('./user');
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors())
 
 app.use(express.json());
 app.use('/posts', postRoutes);
