@@ -1,10 +1,9 @@
 import './App.css';
 import HeaderBar from './components/HeaderBar';
-import { Grid, createTheme,} from "@mui/material";
+import { Grid, createTheme, ThemeProvider } from "@mui/material";
 import CardPost from "./components/CardPosts";
 import FooterBar from "./components/FooterBar";
-import { ThemeProvider } from '@emotion/react';
-
+import CreatePost from './components/CreatePost';
 
 const theme = createTheme({
   palette: {
@@ -21,7 +20,6 @@ const theme = createTheme({
       contrastText: '#e5e6ed'
     }
   }
-  
 })
 
 // use states to store posts, and use effects to load the posts
@@ -31,14 +29,17 @@ export default function App() {
     <ThemeProvider theme={ theme }>
         <HeaderBar />
         <Grid container spacing={4} sx={{ paddingTop: '100px'}} justifyContent='center'>
-          <Grid item xs={12} sm={8}>
-            <CardPost />
-          </Grid>
-          <Grid item xs={12} sm={8}>
-            <CardPost />
-          </Grid>
+        <Grid item xs={12}>
+          <CreatePost />
         </Grid>
-        <FooterBar className='footer'/>
+        <Grid item xs={12}>
+          <CardPost />
+        </Grid>
+        <Grid item xs={12}>
+          <CardPost />
+        </Grid>
+      </Grid>
+      <FooterBar className='footer'/>
     </ThemeProvider>
-  )
+  );
 }

@@ -64,27 +64,27 @@ router.put('/:id', authenticate, async (req, res) => {
     }
   });
   
-  // Delete
-  router.delete('/:id', authenticate, async (req, res) => {
-    try {
-      const { id } = req.params;
-      const post = await Post.findByPk(id);
-      if (!post) {
-        console.log(`Post with ID ${id} not found`);
-        return res.status(404).json({ error: 'Post not found' });
-      }
-      console.log('Post author:', post.author, 'User ID:', req.user.userId);
-      if (String(post.author) === String(req.user.userId)) {  // Ensure type match
-        await post.destroy();
-        res.status(204).json({ message: 'Post deleted successfully.' });
-      } else {
-        console.log('User not authorized to delete this post');
-        res.status(403).json({ error: 'Unauthorized' });
-      }
-    } catch (error) {
-      console.error('Error deleting post:', error.message);
-      res.status(500).json({ error: error.message });
+// Delete
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findByPk(id);
+    if (!post) {
+      console.log(`Post with ID ${id} not found`);
+      return res.status(404).json({ error: 'Post not found' });
     }
-  });
-  
-  module.exports = router;
+    console.log('Post author:', post.author, 'User ID:', req.user.userId);
+    if (String(post.author) === String(req.user.userId)) {  // Ensure type match
+      await post.destroy();
+      res.status(200).json({ message: 'Post deleted successfully.' });  // Change status to 200 and add message
+    } else {
+      console.log('User not authorized to delete this post');
+      res.status(403).json({ error: 'Unauthorized' });
+    }
+  } catch (error) {
+    console.error('Error deleting post:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;
