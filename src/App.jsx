@@ -4,6 +4,7 @@ import { Grid, createTheme, ThemeProvider } from "@mui/material";
 import CardPost from "./components/CardPosts";
 import FooterBar from "./components/FooterBar";
 import CreatePost from './components/CreatePost';
+import LoginPage from './components/LoginPage';
 
 const theme = createTheme({
   palette: {
@@ -27,8 +28,10 @@ const theme = createTheme({
 export default function App() {
   return (
     <ThemeProvider theme={ theme }>
+
         <HeaderBar />
         <Grid container spacing={4} sx={{ paddingTop: '100px'}} justifyContent='center'>
+        <LoginPage />
         <Grid item xs={12}>
           <CreatePost />
         </Grid>
