@@ -24,15 +24,17 @@ const theme = createTheme({
   
 })
 
+// use states to store posts, and use effects to load the posts
+
 export default function App() {
   return (
     <ThemeProvider theme={ theme }>
         <HeaderBar />
-        <Grid container spacing={4} sx={{ paddingTop: '100px'}}>
-          <Grid item xs={12}>
+        <Grid container spacing={4} sx={{ paddingTop: '100px'}} justifyContent='center'>
+          <Grid item xs={12} sm={8}>
             <CardPost />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={8}>
             <CardPost />
           </Grid>
         </Grid>
