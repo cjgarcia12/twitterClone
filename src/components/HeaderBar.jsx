@@ -26,7 +26,7 @@ export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClic
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => handleMenuItemClick(text)}> {/* Updated to use handleMenuItemClick */}
               <ListItemIcon>
-                {index % 2 === 0 ? <AccountCircleIcon /> : <AddCircleIcon /> }
+                {index % 2 === 0 ? <AddCircleIcon /> : <AccountCircleIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>

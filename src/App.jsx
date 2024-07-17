@@ -1,5 +1,5 @@
+import { useState } from 'react'; // Ensure this import is correct
 import './App.css';
-import { useState } from 'react';
 import HeaderBar from './components/HeaderBar';
 import { Grid, createTheme, ThemeProvider } from "@mui/material";
 import CardPost from "./components/CardPosts";
@@ -22,7 +22,7 @@ const theme = createTheme({
       contrastText: '#e5e6ed'
     }
   }
-})
+});
 
 export default function App() {
   const [showCreatePost, setShowCreatePost] = useState(false); // Added state to control CreatePost visibility
@@ -50,7 +50,7 @@ export default function App() {
         <Grid item xs={12} sm={8}>
           <CardPost />
         </Grid>
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12}>
           <CardPost />
         </Grid>
       </Grid>
