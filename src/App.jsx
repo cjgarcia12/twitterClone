@@ -26,7 +26,7 @@ const theme = createTheme({
 
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={ theme }>
         <HeaderBar />
         <Grid container spacing={4} sx={{ paddingTop: '100px'}}>
           <Grid item xs={12}>
@@ -36,7 +36,6 @@ export default function App() {
             <CardPost />
           </Grid>
         </Grid>
-
         <FooterBar className='footer'/>
     </ThemeProvider>
   )
