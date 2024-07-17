@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import HeaderBar from './components/HeaderBar';
 import { Grid, createTheme, ThemeProvider } from "@mui/material";
 import CardPost from "./components/CardPosts";
@@ -20,16 +21,28 @@ const theme = createTheme({
       contrastText: '#e5e6ed'
     }
   }
-})
+});
 
 export default function App() {
+  const [showCreatePost, setShowCreatePost] = useState(false); // Added state to control CreatePost visibility
+
+  const handleMenuClick = (option) => {
+    if (option === 'Create Post') {
+      setShowCreatePost(true);
+    } else {
+      setShowCreatePost(false);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <HeaderBar />
+      <HeaderBar handleMenuClick={handleMenuClick} /> {/* Pass handleMenuClick to HeaderBar */}
       <Grid container spacing={4} sx={{ paddingTop: '100px' }}>
-        <Grid item xs={12}>
-          <CreatePost />
-        </Grid>
+        {showCreatePost && ( // Conditionally render CreatePost component
+          <Grid item xs={12}>
+            <CreatePost setShowCreatePost={setShowCreatePost} /> {/* Pass setShowCreatePost to CreatePost */}
+          </Grid>
+        )}
         <Grid item xs={12}>
           <CardPost />
         </Grid>
@@ -37,7 +50,7 @@ export default function App() {
           <CardPost />
         </Grid>
       </Grid>
-      <FooterBar className='footer'/>
+      <FooterBar className='footer' />
     </ThemeProvider>
   );
 }

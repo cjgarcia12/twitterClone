@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent, CardHeader, TextField, IconButton, Typography, Button, Grid } from '@mui/material';
 import { EmojiEmotions, Image, Gif, MoreHoriz } from '@mui/icons-material';
 
-const CreatePost = () => {
+const CreatePost = ({ setShowCreatePost }) => { 
   const [comment, setComment] = useState('');
-  const [postedComments, setPostedComments] = useState([]);
+  const [title, setTitle] = useState(''); 
 
   const handleCommentChange = (event) => {
     if (event.target.value.length <= 500) {
@@ -12,10 +13,15 @@ const CreatePost = () => {
     }
   };
 
+  const handleTitleChange = (event) => { 
+    setTitle(event.target.value);
+  };
+
   const handlePostComment = () => {
-    if (comment.trim()) {
-      setPostedComments([...postedComments, comment]);
-      setComment('');
+    if (title.trim() && comment.trim()) {
+      // Simulate saving to database
+      // Hide the CreatePost component after posting
+      setShowCreatePost(false);
     }
   };
 
@@ -27,6 +33,16 @@ const CreatePost = () => {
           action={<IconButton><MoreHoriz /></IconButton>}
         />
         <CardContent>
+          <TextField
+            fullWidth
+            placeholder="Title"
+            multiline
+            rows={1}
+            variant="outlined"
+            value={title}
+            onChange={handleTitleChange} 
+            sx={{ marginBottom: 2, fontWeight: 'bold' }} //When entering the title, it becomes Bold. 
+          />
           <TextField
             fullWidth
             placeholder="What's on your mind?"
@@ -57,17 +73,13 @@ const CreatePost = () => {
           </Typography>
         </CardContent>
       </Card>
-      <div>
-        {postedComments.map((postedComment, index) => (
-          <Card key={index} sx={{ maxWidth: 500, margin: '20px auto', padding: 2 }}>
-            <CardContent>
-              <Typography>{postedComment}</Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
     </div>
   );
+};
+
+// Add PropTypes for prop validation
+CreatePost.propTypes = {
+  setShowCreatePost: PropTypes.func.isRequired,
 };
 
 export default CreatePost;

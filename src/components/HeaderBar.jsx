@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types'; // Added PropTypes import
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, InputBase, Drawer, List, ListItemIcon, Divider, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
@@ -6,11 +7,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-export default function HeaderBar() {
+export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClick prop
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+
+  const handleMenuItemClick = (text) => {
+    toggleDrawer(false)();
+    handleMenuClick(text); // Trigger the passed handleMenuClick prop
   };
 
   const DrawerList = (
@@ -18,7 +24,7 @@ export default function HeaderBar() {
       <List>
         {['My Posts', 'Create Post'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => handleMenuItemClick(text)}> {/* Updated to use handleMenuItemClick */}
               <ListItemIcon>
                 {index % 2 === 0 ? <AddCircleIcon /> : <AccountCircleIcon />}
               </ListItemIcon>
@@ -109,3 +115,7 @@ export default function HeaderBar() {
   );
 }
 
+// Added PropTypes for prop validation
+HeaderBar.propTypes = {
+  handleMenuClick: PropTypes.func.isRequired,
+};
