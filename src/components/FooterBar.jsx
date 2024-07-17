@@ -81,7 +81,7 @@ function FooterBar() {
             spacing={2}
             sx={{width: '100%'}}
           >
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }}}>
+            <Box sx={{  display: { xs: 'none', md: 'flex' }}}>
               {pages.map((page) => (
                 <Button
                   key={page}
