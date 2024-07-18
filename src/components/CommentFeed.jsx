@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getComments, deleteComment } from '../api';
 import { Container, Typography, Card, CardContent, CardActions, Button, Alert } from '@mui/material';
+import PropTypes from 'prop-types';
 
-const CommentFeed = ({ postId }) => {
-  const [comments, setComments] = useState([]);
+const CommentFeed = ({ postId, comments }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -55,4 +55,9 @@ const CommentFeed = ({ postId }) => {
   );
 };
 
-export default CommentFeed; // Ensure default export
+CommentFeed.propTypes = {
+  postId: PropTypes.number.isRequired,
+  comments: PropTypes.array.isRequired,
+};
+
+export default CommentFeed;

@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { deletePost } from '../api'; // Ensure deletePost is imported
-import { Stack, Card, CardActions, CardContent, Button, Typography, IconButton, TextField, Alert } from '@mui/material';
+import { updatePost, deletePost } from '../api'; // Ensure updatePost and deletePost are imported
+import { Stack, Card, CardActions, CardContent, Button, Typography, IconButton, Alert } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PropTypes from 'prop-types';
@@ -10,20 +9,36 @@ import CreateComment from './CreateComment';
 import CommentFeed from './CommentFeed';
 
 export default function CardPosts({ post, onDelete }) {
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [comments, setComments] = useState([]); // Add comments state
   const [showComments, setShowComments] = useState(false); // State to toggle comments visibility
-  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleUpdate = async () => {
+    try {
+      await updatePost(post.id, { content: post.content, tags: post.tags });
+      setError('');
+      setSuccess('Post updated successfully!');
+    } catch (error) {
+      setError('Failed to update post. Please try again.');
+      console.error('Update post failed:', error);
+    }
+  };
 
   const handleDelete = async () => {
     try {
       await deletePost(post.id); // Use deletePost from the api
       onDelete(post.id);
+      setError('');
+      setSuccess('Post deleted successfully!');
     } catch (error) {
-      console.error('Failed to delete post:', error);
+      setError('Failed to delete post. Please try again.');
+      console.error('Delete post failed:', error);
     }
   };
 
-  const handleEdit = () => {
-    navigate(`/edit/${post.id}`, { state: { post } }); // Navigate to EditPost with post data
+  const handleCommentAdded = (newComment) => {
+    setComments([...comments, newComment]); // Update comments state with new comment
   };
 
   return (
@@ -32,22 +47,14 @@ export default function CardPosts({ post, onDelete }) {
         <Typography gutterBottom variant="h5" component="div">
           {post.author}
         </Typography>
-        <TextField
-          label="Content"
-          value={post.content}
-          multiline
-          rows={4}
-          fullWidth
-          margin="normal"
-          disabled
-        />
-        <TextField
-          label="Tags"
-          value={post.tags}
-          fullWidth
-          margin="normal"
-          disabled
-        />
+        {error && <Alert severity="error">{error}</Alert>}
+        {success && <Alert severity="success">{success}</Alert>}
+        <Typography variant="body1" component="div">
+          {post.content}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="div">
+          {post.tags}
+        </Typography>
         {post.imageUrl && <img src={post.imageUrl} alt="Post" />}
       </CardContent>
       <CardActions>
@@ -65,7 +72,7 @@ export default function CardPosts({ post, onDelete }) {
             </Button>
           </div>
           <div>
-            <IconButton aria-label="edit" onClick={handleEdit}>
+            <IconButton aria-label="edit" onClick={handleUpdate}>
               <EditIcon />
             </IconButton>
             <IconButton aria-label="delete" onClick={handleDelete}>
@@ -76,8 +83,8 @@ export default function CardPosts({ post, onDelete }) {
       </CardActions>
       {showComments && (
         <>
-          <CreateComment postId={post.id} />
-          <CommentFeed postId={post.id} />
+          <CreateComment postId={post.id} onCommentAdded={handleCommentAdded} /> {/* Pass handleCommentAdded */}
+          <CommentFeed postId={post.id} comments={comments} /> {/* Pass comments as prop */}
         </>
       )}
     </Card>

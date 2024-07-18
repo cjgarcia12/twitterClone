@@ -10,7 +10,7 @@ const LikeButton = ({ postId, initialLiked, initialLikesCount }) => {
 
   useEffect(() => {
     setLiked(initialLiked);
-    setLikesCount(initialLikesCount || 0);  // Ensure initial count is zero if undefined
+    setLikesCount(initialLikesCount || 0); // Ensure initial count is zero if undefined
   }, [initialLiked, initialLikesCount]);
 
   const handleLike = async () => {
@@ -18,11 +18,11 @@ const LikeButton = ({ postId, initialLiked, initialLikesCount }) => {
       if (liked) {
         const response = await unlikePost(postId);
         setLiked(false);
-        setLikesCount(response.data.likesCount);  // Update with the new likes count from the response
+        setLikesCount(response.data.likesCount); // Update with the new likes count from the response
       } else {
         const response = await likePost(postId);
         setLiked(true);
-        setLikesCount(response.data.likesCount);  // Update with the new likes count from the response
+        setLikesCount(response.data.likesCount); // Update with the new likes count from the response
       }
     } catch (error) {
       console.error('Failed to update like status:', error);
