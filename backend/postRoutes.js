@@ -1,8 +1,8 @@
 const express = require('express');
 const Post = require('./post');
-const User = require('./user');  // Include User model
+const User = require('./user');
 const authenticate = require('./authMiddleware');
-const upload = require('./upload');  // Ensure this line is present
+const upload = require('./upload');
 
 const router = express.Router();
 
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
     const posts = await Post.findAndCountAll({
       limit,
       offset,
-      include: [{ model: User, attributes: ['username'] }], // Include username
+      include: [{ model: User, attributes: ['username'] }],
     });
     res.status(200).json({
       totalItems: posts.count,
@@ -40,6 +40,22 @@ router.get('/', async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+});
+
+// Fetch single post by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findByPk(id, {
+      include: [{ model: User, attributes: ['username'] }]
+    });
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -54,7 +70,7 @@ router.put('/:id', authenticate, async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
     console.log('Post author:', post.author, 'User ID:', req.user.userId);
-    if (String(post.author) === String(req.user.userId)) {  // Ensure type match
+    if (String(post.author) === String(req.user.userId)) {
       post.content = content;
       post.tags = tags;
       await post.save();
@@ -79,9 +95,9 @@ router.delete('/:id', authenticate, async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
     console.log('Post author:', post.author, 'User ID:', req.user.userId);
-    if (String(post.author) === String(req.user.userId)) {  // Ensure type match
+    if (String(post.author) === String(req.user.userId)) {
       await post.destroy();
-      res.status(200).json({ message: 'Post deleted successfully.' });  // Change status to 200 and add message
+      res.status(200).json({ message: 'Post deleted successfully.' });
     } else {
       console.log('User not authorized to delete this post');
       res.status(403).json({ error: 'Unauthorized' });

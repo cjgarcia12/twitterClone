@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { updatePost, deletePost } from '../api'; // Ensure updatePost and deletePost are imported
+import { useNavigate } from 'react-router-dom';
+import { deletePost } from '../api'; // Ensure deletePost is imported correctly
 import { Stack, Card, CardActions, CardContent, Button, Typography, IconButton, Alert } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -8,21 +9,16 @@ import LikeButton from './LikeButton';
 import CreateComment from './CreateComment';
 import CommentFeed from './CommentFeed';
 
-export default function CardPosts({ post, onDelete }) {
+export default function CardPosts({ post, onEdit, onDelete }) {
+  const navigate = useNavigate();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [comments, setComments] = useState([]); // Add comments state
   const [showComments, setShowComments] = useState(false); // State to toggle comments visibility
 
-  const handleUpdate = async () => {
-    try {
-      await updatePost(post.id, { content: post.content, tags: post.tags });
-      setError('');
-      setSuccess('Post updated successfully!');
-    } catch (error) {
-      setError('Failed to update post. Please try again.');
-      console.error('Update post failed:', error);
-    }
+  const handleEdit = () => {
+    onEdit(post);
+    navigate(`/edit/${post.id}`);
   };
 
   const handleDelete = async () => {
@@ -31,6 +27,9 @@ export default function CardPosts({ post, onDelete }) {
       onDelete(post.id);
       setError('');
       setSuccess('Post deleted successfully!');
+      setTimeout(() => {
+        window.location.reload(); // Refresh the page after deletion
+      }, 500); // Slight delay for better UX
     } catch (error) {
       setError('Failed to delete post. Please try again.');
       console.error('Delete post failed:', error);
@@ -72,7 +71,7 @@ export default function CardPosts({ post, onDelete }) {
             </Button>
           </div>
           <div>
-            <IconButton aria-label="edit" onClick={handleUpdate}>
+            <IconButton aria-label="edit" onClick={handleEdit}>
               <EditIcon />
             </IconButton>
             <IconButton aria-label="delete" onClick={handleDelete}>
@@ -93,5 +92,6 @@ export default function CardPosts({ post, onDelete }) {
 
 CardPosts.propTypes = {
   post: PropTypes.object.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };

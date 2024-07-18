@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
 import './App.css';
 import HeaderBar from './components/HeaderBar';
 import { Grid, createTheme, ThemeProvider } from '@mui/material';
@@ -60,6 +60,9 @@ export default function App() {
     try {
       await axios.delete(`/posts/${postId}`);
       setPosts(posts.filter((post) => post.id !== postId));
+      setTimeout(() => {
+        window.location.reload(); // Refresh the page after deletion
+      }, 500); // Slight delay for better UX
     } catch (error) {
       console.error('Error deleting post', error);
     }
