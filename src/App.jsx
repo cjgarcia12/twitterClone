@@ -34,6 +34,7 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -87,8 +88,8 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <HeaderBar handleLogout={handleLogout} isAuthenticated={isAuthenticated} />
-        <Grid container spacing={4} sx={{ paddingTop: '100px', marginBottom: '100px', width: '100%' }} justifyContent="center">
+        <HeaderBar handleLogout={handleLogout} isAuthenticated={isAuthenticated} onSearchResults={setSearchResults} />
+        <Grid container spacing={4} sx={{ paddingTop: '100px', marginBottom: '100px' }} justifyContent='center'>
           <Routes>
             <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -96,20 +97,28 @@ export default function App() {
               path="/"
               element={
                 isAuthenticated ? (
-                  <Grid item xs={12}>
-                    {posts.map((post) => (
-                      <Grid item xs={12} sm={8} key={post.id}>
-                        <CardPosts post={post} onEdit={handleEdit} onDelete={handleDelete} />
-                      </Grid>
-                    ))}
-                    <div>
+                  <>
+                    {searchResults.length > 0 ? (
+                      searchResults.map((post) => (
+                        <Grid item xs={12} sm={8} key={post.id}>
+                          <CardPosts post={post} onEdit={handleEdit} onDelete={handleDelete} />
+                        </Grid>
+                      ))
+                    ) : (
+                      posts.map((post) => (
+                        <Grid item xs={12} sm={8} key={post.id}>
+                          <CardPosts post={post} onEdit={handleEdit} onDelete={handleDelete} />
+                        </Grid>
+                      ))
+                    )}
+                    <Grid item xs={12} sm={8}>
                       {Array.from({ length: totalPages }, (_, i) => (
                         <button key={i} onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
                           {i + 1}
                         </button>
                       ))}
-                    </div>
-                  </Grid>
+                    </Grid>
+                  </>
                 ) : (
                   <Navigate to="/login" />
                 )

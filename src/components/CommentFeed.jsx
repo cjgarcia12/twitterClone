@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getComments, deleteComment } from '../api';
 import { Container, Typography, Card, CardContent, CardActions, Button, Alert } from '@mui/material';
 import PropTypes from 'prop-types';
