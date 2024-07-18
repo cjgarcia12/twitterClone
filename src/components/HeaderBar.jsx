@@ -1,37 +1,39 @@
 import * as React from 'react';
-import PropTypes from 'prop-types'; // Added PropTypes import
+// import PropTypes from 'prop-types';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, InputBase, Drawer, List, ListItemIcon, Divider, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link } from 'react-router-dom';
 
-export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClick prop
+export default function HeaderBar() {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
-  const handleMenuItemClick = (text) => {
-    toggleDrawer(false)();
-    handleMenuClick(text); // Trigger the passed handleMenuClick prop
-  };
-
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {['My Posts', 'Create Post'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton onClick={() => handleMenuItemClick(text)}> {/* Updated to use handleMenuItemClick */}
-              <ListItemIcon>
-                {index % 2 === 0 ? <AddCircleIcon /> : <AccountCircleIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/">
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="My Posts" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/create">
+            <ListItemIcon>
+              <AddCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create Post" />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
     </Box>
@@ -67,7 +69,6 @@ export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClic
     width: '100%',
     '& .MuiInputBase-input': {
       padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create('width'),
       [theme.breakpoints.up('sm')]: {
@@ -108,14 +109,12 @@ export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClic
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" component={Link} to="/login">Login</Button>
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
 
-// Added PropTypes for prop validation
-HeaderBar.propTypes = {
-  handleMenuClick: PropTypes.func.isRequired,
-};
+// Remove PropTypes for handleMenuClick since it's no longer needed
+HeaderBar.propTypes = {};

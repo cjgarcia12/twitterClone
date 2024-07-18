@@ -1,11 +1,15 @@
-import { useState } from 'react'; // Ensure this import is correct
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import HeaderBar from './components/HeaderBar';
-import { Grid, createTheme, ThemeProvider } from "@mui/material";
-import CardPost from "./components/CardPosts";
-import FooterBar from "./components/FooterBar";
+import { Grid, createTheme, ThemeProvider } from '@mui/material';
+import CardPosts from './components/CardPosts';
+import FooterBar from './components/FooterBar';
 import CreatePost from './components/CreatePost';
-// import LoginPage from './components/LoginPage';
+import EditPost from './components/EditPost';
+import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -13,48 +17,136 @@ const theme = createTheme({
       main: '#17153B',
       light: '#5a59ae',
       dark: '#2E236C',
-      contrastText: '#e5e6ed'
+      contrastText: '#e5e6ed',
     },
     secondary: {
       main: '#433D8B',
       light: '#373c70',
       dark: '#1c1a00',
-      contrastText: '#e5e6ed'
-    }
-  }
+      contrastText: '#e5e6ed',
+    },
+  },
 });
 
 export default function App() {
-  const [showCreatePost, setShowCreatePost] = useState(false); // Added state to control CreatePost visibility
+  const [posts, setPosts] = useState([]);
+  const [postToEdit, setPostToEdit] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
 
-  const handleMenuClick = (option) => {
-    if (option === 'Create Post') {
-      setShowCreatePost(true);
-    } else {
-      setShowCreatePost(false);
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchPosts(page);
     }
+  }, [page, isAuthenticated]);
+
+  const fetchPosts = async (page) => {
+    try {
+      const response = await axios.get(`/posts?page=${page}`);
+      setPosts(response.data.data || []);
+      setTotalPages(response.data.totalPages || 1);
+    } catch (error) {
+      console.error('Error fetching posts', error);
+      setPosts([]);
+    }
+  };
+
+  const handleEdit = (post) => {
+    setPostToEdit(post);
+  };
+
+  const handleDelete = async (postId) => {
+    try {
+      await axios.delete(`/posts/${postId}`);
+      setPosts(posts.filter((post) => post.id !== postId));
+    } catch (error) {
+      console.error('Error deleting post', error);
+    }
+  };
+
+  const handlePostSaved = () => {
+    fetchPosts(page);
+    setPostToEdit(null);
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId'); // Clear userId from localStorage
+    setIsAuthenticated(false);
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <HeaderBar handleMenuClick={handleMenuClick} /> {/* Pass handleMenuClick to HeaderBar */}
-      <Grid container spacing={4} sx={{ paddingTop: '100px', marginBottom: '100px' }} justifyContent='center'>
-        {showCreatePost && ( // Conditionally render CreatePost component
-          <Grid item xs={12}>
-            <CreatePost setShowCreatePost={setShowCreatePost} /> {/* Pass setShowCreatePost to CreatePost */}
-          </Grid>
-        )}
-        <Grid item xs={12}>
-          <CreatePost />
+      <Router>
+        <HeaderBar handleLogout={handleLogout} isAuthenticated={isAuthenticated} />
+        <Grid container spacing={4} sx={{ paddingTop: '100px', marginBottom: '100px' }} justifyContent="center">
+          <Routes>
+            <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? (
+                  <Grid item xs={12}>
+                    {posts.map((post) => (
+                      <Grid item xs={12} sm={8} key={post.id}>
+                        <CardPosts post={post} onEdit={handleEdit} onDelete={handleDelete} />
+                      </Grid>
+                    ))}
+                    <div>
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <button key={i} onClick={() => handlePageChange(i + 1)} disabled={page === i + 1}>
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
+                  </Grid>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/create"
+              element={
+                isAuthenticated ? (
+                  <Grid item xs={12}>
+                    <CreatePost setShowCreatePost={() => {}} postToEdit={null} onPostSaved={handlePostSaved} />
+                  </Grid>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/edit/:id"
+              element={
+                isAuthenticated ? (
+                  postToEdit ? (
+                    <Grid item xs={12}>
+                      <EditPost post={postToEdit} onPostSaved={handlePostSaved} />
+                    </Grid>
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+          </Routes>
         </Grid>
-        <Grid item xs={12} sm={8}>
-          <CardPost />
-        </Grid>
-        <Grid item xs={12}>
-          <CardPost />
-        </Grid>
-      </Grid>
-      <FooterBar className='footer' />
+        <FooterBar className="footer" />
+      </Router>
     </ThemeProvider>
   );
 }
