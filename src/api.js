@@ -27,3 +27,6 @@ export const getComments = (postId) => api.get(`/comments/${postId}`);
 export const deleteComment = (id) => api.delete(`/comments/${id}`);
 export const likePost = (postId) => api.post(`/likes/${postId}`);
 export const unlikePost = (postId) => api.delete(`/likes/${postId}`);
+export const getPostById = (id) => api.get(`/posts/${id}`); // Ensure this is correct
+
+export default api;
