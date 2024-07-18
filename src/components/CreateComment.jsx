@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { createComment } from '../api';
 import { TextField, Button, Container, Typography, Alert } from '@mui/material';
+import PropTypes from 'prop-types';
 
-const CreateComment = ({ postId }) => {
+const CreateComment = ({ postId, onCommentAdded }) => {
   const [content, setContent] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -10,10 +11,11 @@ const CreateComment = ({ postId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createComment(postId, { content });
+      const response = await createComment(postId, { content });
       setError('');
       setSuccess('Comment created successfully!');
       setContent('');
+      onCommentAdded(response.data); // Call the callback function with the new comment
     } catch (error) {
       setError('Failed to create comment. Please try again.');
       console.error('Create comment failed:', error);
@@ -44,6 +46,11 @@ const CreateComment = ({ postId }) => {
       </form>
     </Container>
   );
+};
+
+CreateComment.propTypes = {
+  postId: PropTypes.number.isRequired,
+  onCommentAdded: PropTypes.func.isRequired,
 };
 
 export default CreateComment;

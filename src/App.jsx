@@ -88,7 +88,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <HeaderBar handleLogout={handleLogout} isAuthenticated={isAuthenticated} />
-        <Grid container spacing={4} sx={{ paddingTop: '100px', marginBottom: '100px' }} justifyContent="center">
+        <Grid container spacing={4} sx={{ paddingTop: '100px', marginBottom: '100px', width: '100%' }} justifyContent="center">
           <Routes>
             <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
             <Route path="/register" element={<RegisterPage />} />
