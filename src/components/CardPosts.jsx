@@ -45,7 +45,7 @@ export default function CardPosts({ post, onDelete }) {
     <Card elevation={16}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {post.author}
+          {post.User.username} {/* Display username */}
         </Typography>
         {error && <Alert severity="error">{error}</Alert>}
         {success && <Alert severity="success">{success}</Alert>}
