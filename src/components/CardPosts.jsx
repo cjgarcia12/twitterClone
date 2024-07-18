@@ -1,52 +1,74 @@
-// import Card from '@mui/material/Card';
-// import CardActions from '@mui/material/CardActions';
-// import CardContent from '@mui/material/CardContent';
-// import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-// import IconButton from '@mui/material/IconButton';
-import { Stack, Card, CardActions, CardContent, Button, Typography, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { updatePost, deletePost } from '../api';
+import { TextField, Button, Card, CardContent, CardActions, Typography, Alert } from '@mui/material';
+import LikeButton from './LikeButton';
+import CreateComment from './CreateComment';
+import CommentFeed from './CommentFeed';
 
-export default function CardPosts() {
+const CardPosts = ({ post }) => {
+  const [content, setContent] = useState(post.content);
+  const [tags, setTags] = useState(post.tags);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleUpdate = async () => {
+    try {
+      await updatePost(post.id, { content, tags });
+      setError('');
+      setSuccess('Post updated successfully!');
+    } catch (error) {
+      setError('Failed to update post. Please try again.');
+      console.error('Update post failed:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deletePost(post.id);
+      setError('');
+      setSuccess('Post deleted successfully!');
+    } catch (error) {
+      setError('Failed to delete post. Please try again.');
+      console.error('Delete post failed:', error);
+    }
+  };
+
   return (
-    <>
-        <Card elevation={16}>
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                    species, ranging across all continents except Antarctica
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Stack 
-                    direction='row'
-                    justifyContent='space-between'
-                    alignItems='center'
-                    spacing={2}
-                    sx={{width: '95%'}}
-                >
-                <div>
-                    <Button size="small">Like</Button>
-                    <Button size="small">Share</Button>
-                </div>
-                <div>
-                    <IconButton aria-label='edit'>
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton aria-label='delete'>
-                        <DeleteIcon />
-                    </IconButton>
-                </div>          
-                </Stack>
-
-            </CardActions>
-        </Card>
-    </>
-
+    <Card>
+      <CardContent>
+        <Typography variant="h5">Post</Typography>
+        {error && <Alert severity="error">{error}</Alert>}
+        {success && <Alert severity="success">{success}</Alert>}
+        <TextField
+          label="Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          multiline
+          rows={4}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Tags"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+      </CardContent>
+      <CardActions>
+        <Button variant="contained" color="primary" onClick={handleUpdate}>
+          Update
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleDelete}>
+          Delete
+        </Button>
+        <LikeButton postId={post.id} initialLiked={post.liked} initialLikesCount={post.likesCount} />
+      </CardActions>
+      <CreateComment postId={post.id} />
+      <CommentFeed postId={post.id} />
+    </Card>
   );
-}
+};
 
+export default CardPosts;

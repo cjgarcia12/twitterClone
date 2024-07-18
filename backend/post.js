@@ -1,22 +1,27 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('./database');
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('./database');  // Correct path to database.js
 
-const Post = sequelize.define('Post', {
+class Post extends Model {}
+
+Post.init({
   content: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   date: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
+    allowNull: false,
   },
   author: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   tags: {
-    type: DataTypes.STRING
-  }
+    type: DataTypes.STRING,
+  },
+}, {
+  sequelize,
+  modelName: 'Post',
 });
 
 module.exports = Post;
