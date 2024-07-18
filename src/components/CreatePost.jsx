@@ -83,7 +83,7 @@ const CreatePost = ({ setShowCreatePost, postToEdit, onPostSaved }) => {
         action={<IconButton><MoreHoriz /></IconButton>}
       />
       <CardContent>
-        <TextField
+        {/* <TextField
           fullWidth
           placeholder="Title"
           multiline
@@ -92,7 +92,7 @@ const CreatePost = ({ setShowCreatePost, postToEdit, onPostSaved }) => {
           value={title}
           onChange={handleTitleChange}
           sx={{ marginBottom: 2, fontWeight: 'bold' }}
-        />
+        /> */}
         <TextField
           fullWidth
           placeholder="What's on your mind?"
