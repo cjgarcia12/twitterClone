@@ -16,7 +16,7 @@ const Post = sequelize.define('Post', {
   },
   tags: {
     type: DataTypes.STRING
-  }
+  },
 });
 
 module.exports = Post;
