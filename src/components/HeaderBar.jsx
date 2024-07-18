@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useRef } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, InputBase, Drawer, List, ListItemIcon, Divider, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
@@ -6,12 +6,12 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
 import { searchPost } from '../api';
 
 export default function HeaderBar({ handleLogout, isAuthenticated, onSearchResults }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const searchInputRef = useRef(null);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -122,6 +122,7 @@ export default function HeaderBar({ handleLogout, isAuthenticated, onSearchResul
                 inputProps={{ 'aria-label': 'search' }}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                inputRef={searchInputRef} // Use ref for input
               />
               <Button type="submit" variant="contained" color="primary">Search</Button>
             </form>
