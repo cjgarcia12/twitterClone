@@ -3,6 +3,8 @@ const Post = require('./post');
 const User = require('./user');  // Include User model
 const authenticate = require('./authMiddleware');
 const upload = require('./upload');  // Ensure this line is present
+const { sequelize } = require('sequelize'); // for search 
+
 
 const router = express.Router();
 
@@ -91,5 +93,26 @@ router.delete('/:id', authenticate, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+router.get('/search', async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+      return res.status(400).json({ error: 'Query parameter is required' });
+  }
+
+  try {
+      const posts = await sequelize.query(
+          'SELECT * FROM Posts WHERE content LIKE :searchValue OR tags LIKE :searchValue',
+          {
+              replacements: { searchValue: `%${q}%` },
+              type: sequelize.QueryTypes.SELECT,
+          }
+      );
+      res.status(200).json(posts);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
 
 module.exports = router;

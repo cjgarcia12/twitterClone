@@ -1,5 +1,4 @@
-import * as React from 'react';
-// import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, InputBase, Drawer, List, ListItemIcon, Divider, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
@@ -7,12 +6,24 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-export default function HeaderBar() {
+export default function HeaderBar({ handleLogout, isAuthenticated, onSearchResults }) {
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = useState('');
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.get(`/api/search?q=${query}`);
+      onSearchResults(response.data);
+    } catch (error) {
+      console.error('Error searching posts', error);
+    }
   };
 
   const DrawerList = (
@@ -104,17 +115,23 @@ export default function HeaderBar() {
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
+            <form onSubmit={handleSearch} style={{ display: 'flex' }}>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <Button type="submit" variant="contained" color="primary">Search</Button>
+            </form>
           </Search>
-          <Button color="inherit" component={Link} to="/login">Login</Button>
+          {isAuthenticated ? (
+            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">Login</Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
-
-// Remove PropTypes for handleMenuClick since it's no longer needed
-HeaderBar.propTypes = {};

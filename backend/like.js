@@ -1,15 +1,29 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('./database');
-const Post = require('./post');  // Import the Post model
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('./database');  // Correct path to database.js
+const Post = require('./post');
 
-const Like = sequelize.define('Like', {
+class Like extends Model {}
+
+Like.init({
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false
-  }
+    allowNull: false,
+  },
+  postId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Post,
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  },
+}, {
+  sequelize,
+  modelName: 'Like',
 });
 
 Like.belongsTo(Post, { foreignKey: 'postId', onDelete: 'CASCADE' });
-Post.hasMany(Like, { foreignKey: 'postId' });
+Post.hasMany(Like, { foreignKey: 'postId', onDelete: 'CASCADE' });
 
 module.exports = Like;
