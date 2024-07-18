@@ -1,4 +1,5 @@
 import axios from 'axios';
+// import { query } from 'express';
 
 const API_URL = 'http://localhost:3000';
 
@@ -28,5 +29,6 @@ export const deleteComment = (id) => api.delete(`/comments/${id}`);
 export const likePost = (postId) => api.post(`/likes/${postId}`);
 export const unlikePost = (postId) => api.delete(`/likes/${postId}`);
 export const getPostById = (id) => api.get(`/posts/${id}`); // Ensure this is correct
+export const searchPost = (query) => api.get(`/search?q=${query}`);
 
 export default api;

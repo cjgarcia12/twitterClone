@@ -1,4 +1,5 @@
 const express = require('express');
+const { sequelize } = require('./database');
 const Post = require('./post');
 const User = require('./user');
 const authenticate = require('./authMiddleware');
@@ -108,25 +109,25 @@ router.delete('/:id', authenticate, async (req, res) => {
   }
 });
 
-router.get('/search', async (req, res) => {
-  const { q } = req.query;
-  if (!q) {
-      return res.status(400).json({ error: 'Query parameter is required' });
-  }
+// router.get('/search', async (req, res) => {
+//   const { q } = req.query;
+//   if (!q) {
+//       return res.status(400).json({ error: 'Query parameter is required' });
+//   }
 
-  try {
-      const posts = await sequelize.query(
-          'SELECT * FROM Posts WHERE content LIKE :searchValue OR tags LIKE :searchValue',
-          {
-              replacements: { searchValue: `%${q}%` },
-              type: sequelize.QueryTypes.SELECT,
-          }
-      );
-      res.status(200).json(posts);
-  } catch (error) {
-      res.status(500).json({ error: error.message });
-  }
-});
+//   try {
+//       const posts = await sequelize.query(
+//           'SELECT * FROM Posts WHERE content LIKE :searchValue OR tags LIKE :searchValue',
+//           {
+//               replacements: { searchValue: `%${q}%` },
+//               type: sequelize.QueryTypes.SELECT,
+//           }
+//       );
+//       res.status(200).json(posts);
+//   } catch (error) {
+//       res.status(500).json({ error: error.message });
+//   }
+// });
 
 
 module.exports = router;

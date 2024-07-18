@@ -6,7 +6,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import { searchPost } from '../api';
 
 export default function HeaderBar({ handleLogout, isAuthenticated, onSearchResults }) {
   const [open, setOpen] = React.useState(false);
@@ -19,7 +20,7 @@ export default function HeaderBar({ handleLogout, isAuthenticated, onSearchResul
   const handleSearch = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.get(`/api/search?q=${query}`);
+      const response = await searchPost(query);
       onSearchResults(response.data);
     } catch (error) {
       console.error('Error searching posts', error);
