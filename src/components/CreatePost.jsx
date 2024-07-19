@@ -110,10 +110,10 @@ const CreatePost = ({ setShowCreatePost, postToEdit, onPostSaved }) => {
           onChange={handleTagsChange}
           sx={{ marginTop: 2 }}
         />
-        <Button variant="contained" component="label" sx={{ marginTop: 2 }}>
+        {/* <Button variant="contained" component="label" sx={{ marginTop: 2 }}>
           Upload Image
           <input type="file" hidden onChange={handleImageChange} />
-        </Button>
+        </Button> */}
         <Grid container spacing={1} alignItems="center" justifyContent="space-between" sx={{ mt: 1 }}>
           <Grid item>
             <IconButton color="primary">
