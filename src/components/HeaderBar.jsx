@@ -1,37 +1,51 @@
-import * as React from 'react';
-import PropTypes from 'prop-types'; // Added PropTypes import
+import { useState, useRef } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, InputBase, Drawer, List, ListItemIcon, Divider, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link } from 'react-router-dom';
+import { searchPost } from '../api';
 
-export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClick prop
-  const [open, setOpen] = React.useState(false);
+export default function HeaderBar({ handleLogout, isAuthenticated, onSearchResults }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const searchInputRef = useRef(null);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
-  const handleMenuItemClick = (text) => {
-    toggleDrawer(false)();
-    handleMenuClick(text); // Trigger the passed handleMenuClick prop
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await searchPost(query);
+      onSearchResults(response.data);
+    } catch (error) {
+      console.error('Error searching posts', error);
+    }
   };
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {['My Posts', 'Create Post'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton onClick={() => handleMenuItemClick(text)}> {/* Updated to use handleMenuItemClick */}
-              <ListItemIcon>
-                {index % 2 === 0 ? <AddCircleIcon /> : <AccountCircleIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/">
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="My Posts" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/create">
+            <ListItemIcon>
+              <AddCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create Post" />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
     </Box>
@@ -67,7 +81,6 @@ export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClic
     width: '100%',
     '& .MuiInputBase-input': {
       padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create('width'),
       [theme.breakpoints.up('sm')]: {
@@ -103,19 +116,24 @@ export default function HeaderBar({ handleMenuClick }) { // Added handleMenuClic
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
+            <form onSubmit={handleSearch} style={{ display: 'flex' }}>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                inputRef={searchInputRef} // Use ref for input
+              />
+              <Button type="submit" variant="contained" color="primary">Search</Button>
+            </form>
           </Search>
-          <Button color="inherit">Login</Button>
+          {isAuthenticated ? (
+            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">Login</Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
-
-// Added PropTypes for prop validation
-HeaderBar.propTypes = {
-  handleMenuClick: PropTypes.func.isRequired,
-};
