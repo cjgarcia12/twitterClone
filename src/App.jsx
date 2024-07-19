@@ -9,6 +9,8 @@ import CreatePost from './components/CreatePost';
 import EditPost from './components/EditPost';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
+import Countdown from './components/CountDown';
+// import AboutUs from './components/AboutUs';
 import axios from 'axios';
 
 const theme = createTheme({
@@ -155,6 +157,8 @@ export default function App() {
                 )
               }
             />
+            <Route path="/contact" element={<Countdown />} />
+            <Route path="/aboutus" element={<Countdown />} />
           </Routes>
         </Grid>
         <FooterBar className="footer" />
